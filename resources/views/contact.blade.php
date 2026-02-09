@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout title='Contact Us'>
     <h1>Contact Us</h1>
         <p>We’d love to hear from you! Whether you have a question, feedback, or just want to say hello, feel free to reach out.</p>
     <div>
