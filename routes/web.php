@@ -12,4 +12,26 @@ Route::view('/', 'home',[
     ],
 ]);
 Route::view('/about', 'about');
-Route::view('/contact', 'contact');
+
+// Contact render page
+Route::get('/contact', function () {
+    $ideas = session()->get('ideas', []);
+    return view('contact',[
+        'ideas' => $ideas,
+    ]);
+});
+
+// Contact post response
+Route::post('/contact', function() {
+    $idea = request('idea');
+    session()->push('ideas', $idea);
+
+    return redirect('/contact');
+});
+
+// Contact delete idea
+Route::get('/delete-ideas', function () {
+    session()->forget('ideas');
+
+    return redirect('/contact');
+});
