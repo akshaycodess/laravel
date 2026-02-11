@@ -10,10 +10,11 @@
         <title>{{ $title }}</title>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
-    <body class="bg-gray-800 p-6 max-w-xl mx-auto">
+    <body class="bg-gray-600 p-6 max-w-xl mx-auto">
         <nav>
             <a href="/about">About Us</a>
             <a href="/contact">Contact Us</a>
+            <a href="/ideas">Ideas</a>
         </nav>
         <main>
             {{ $slot }}

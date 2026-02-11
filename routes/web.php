@@ -13,9 +13,11 @@ Route::view('/', 'home',[
     ],
 ]);
 Route::view('/about', 'about');
+Route::view('/contact', 'contact');
 
-// Contact render page
-Route::get('/contact', function () {
+// start ideas
+// index
+Route::get('/ideas', function () {
     // Get all.
     // $ideas = Idea::all();
     // Get according to condition but will not work when their is no value.
@@ -27,26 +29,48 @@ Route::get('/contact', function () {
         })
         ->get();
 
-    return view('contact',[
+    return view('ideas.index',[
         'ideas' => $ideas,
     ]);
 });
 
-// Contact post response
-Route::post('/contact', function() {
-    $idea = request('idea');
-    if ($idea) {
+// create
+Route::post('/ideas', function () {
+    $idea_desc = request('description');
+    if ($idea_desc) {
         Idea::create([
-            'description' => $idea,
+            'description' => $idea_desc,
             'state' => 'pending',
         ]);
     }
-
-    return redirect('/contact');
+    return redirect('/ideas');
 });
 
-// Contact delete idea
-Route::get('/delete-ideas', function () {
-    Idea::truncate();
-    return redirect('/contact');
+// read
+Route::get('/ideas/{idea}', function (Idea $idea) {
+    return view('ideas.show', [
+        'idea' => $idea,
+    ]);
 });
+
+// update page
+Route::get('/ideas/{idea}/edit', function (Idea $idea) {
+    return view('ideas.edit', [
+        'idea' => $idea,
+    ]);
+});
+
+// update
+Route::patch('/ideas/{idea}', function (Idea $idea) {
+    $idea->update([
+        'description' => request('description')
+    ]);
+    return redirect("/ideas/{$idea->id}");
+});
+
+// delete
+Route::delete('/ideas/{idea}', function (Idea $idea) {
+    $idea->delete();
+    return redirect('/ideas');
+});
+// end ideas
