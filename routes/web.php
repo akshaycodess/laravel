@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Idea;
 
 Route::view('/', 'home',[
     'message' => 'Hello',
@@ -15,7 +16,17 @@ Route::view('/about', 'about');
 
 // Contact render page
 Route::get('/contact', function () {
-    $ideas = session()->get('ideas', []);
+    // Get all.
+    // $ideas = Idea::all();
+    // Get according to condition but will not work when their is no value.
+    // $ideas = Idea::where('state', '=', request('state'))->get();
+    // Get according to condition and will also work when their is no value.
+    $ideas = Idea::query()
+        ->when(request('state'), function($query, $state) {
+            $query->where('state', $state);
+        })
+        ->get();
+
     return view('contact',[
         'ideas' => $ideas,
     ]);
@@ -24,14 +35,18 @@ Route::get('/contact', function () {
 // Contact post response
 Route::post('/contact', function() {
     $idea = request('idea');
-    session()->push('ideas', $idea);
+    if ($idea) {
+        Idea::create([
+            'description' => $idea,
+            'state' => 'pending',
+        ]);
+    }
 
     return redirect('/contact');
 });
 
 // Contact delete idea
 Route::get('/delete-ideas', function () {
-    session()->forget('ideas');
-
+    Idea::truncate();
     return redirect('/contact');
 });
