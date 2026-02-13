@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\IdeaController;
 use Illuminate\Support\Facades\Route;
-use App\Models\Idea;
 
 Route::view('/', 'home',[
     'message' => 'Hello',
@@ -16,61 +16,11 @@ Route::view('/about', 'about');
 Route::view('/contact', 'contact');
 
 // start ideas
-// index
-Route::get('/ideas', function () {
-    // Get all.
-    // $ideas = Idea::all();
-    // Get according to condition but will not work when their is no value.
-    // $ideas = Idea::where('state', '=', request('state'))->get();
-    // Get according to condition and will also work when their is no value.
-    $ideas = Idea::query()
-        ->when(request('state'), function($query, $state) {
-            $query->where('state', $state);
-        })
-        ->get();
-
-    return view('ideas.index',[
-        'ideas' => $ideas,
-    ]);
-});
-
-// create
-Route::post('/ideas', function () {
-    $idea_desc = request('description');
-    if ($idea_desc) {
-        Idea::create([
-            'description' => $idea_desc,
-            'state' => 'pending',
-        ]);
-    }
-    return redirect('/ideas');
-});
-
-// read
-Route::get('/ideas/{idea}', function (Idea $idea) {
-    return view('ideas.show', [
-        'idea' => $idea,
-    ]);
-});
-
-// update page
-Route::get('/ideas/{idea}/edit', function (Idea $idea) {
-    return view('ideas.edit', [
-        'idea' => $idea,
-    ]);
-});
-
-// update
-Route::patch('/ideas/{idea}', function (Idea $idea) {
-    $idea->update([
-        'description' => request('description')
-    ]);
-    return redirect("/ideas/{$idea->id}");
-});
-
-// delete
-Route::delete('/ideas/{idea}', function (Idea $idea) {
-    $idea->delete();
-    return redirect('/ideas');
-});
+Route::get('/ideas', [IdeaController::class, 'index']);
+Route::get('/ideas/create', [IdeaController::class, 'create']);
+Route::post('/ideas', [IdeaController::class, 'store']);
+Route::get('/ideas/{idea}', [IdeaController::class, 'show']);
+Route::get('/ideas/{idea}/edit', [IdeaController::class, 'edit']);
+Route::patch('/ideas/{idea}', [IdeaController::class, 'update']);
+Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy']);
 // end ideas
