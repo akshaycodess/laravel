@@ -34,6 +34,7 @@ class IdeaController extends Controller
         $idea_desc = $request->description;
         if ($idea_desc) {
             Idea::create([
+                'heading' => $request->heading,
                 'description' => $idea_desc,
                 'state' => 'pending',
             ]);
@@ -67,6 +68,7 @@ class IdeaController extends Controller
     public function update(IdeaRequest $request, Idea $idea)
     {
         $idea->update([
+            'heading' => $request->heading,
             'description' => $request->description
         ]);
         return redirect("/ideas/{$idea->id}");

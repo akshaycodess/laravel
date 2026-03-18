@@ -22,6 +22,7 @@ class IdeaRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'heading' => ['required', 'min:5'],
             'description' => ['required', 'min:10'],
         ];
     }

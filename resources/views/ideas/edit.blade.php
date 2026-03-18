@@ -3,6 +3,16 @@
         @csrf
         @method('PATCH')
         <div class="col-span-full">
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Heading</legend>
+            <input
+                id="heading"
+                name="heading"
+                type="text"
+                class="input @error('heading') textarea-error @enderror"
+                value="{{ $idea->heading }}" />
+        <x-forms.error name="heading"></x-forms.error>
+        </fieldset>
         <label for="description" class="block text-sm/6 font-medium text-white-900">Edit your idea</label>
         <div class="mt-2">
         <textarea
